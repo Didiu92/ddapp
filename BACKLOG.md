@@ -17,10 +17,10 @@ instrucciones específicas en `.github/instructions/`.
       `_tmp_watch_health.sh`, `_tmp_health_poll.log`).
 - [x] Eliminar carpeta `backend/` (vacía, no usada — Supabase es el backend;
       si algún día hace falta lógica de servidor, va en `supabase/functions/`).
-- [ ] `git init` + primer commit + `.gitignore` (node_modules, dist,
+- [x] `git init` + primer commit + `.gitignore` (node_modules, dist,
       `supabase/.branches`, `supabase/.temp`, `.angular/cache`).
-- [ ] Repositorio remoto (GitLab, según preferencia del usuario) y push
-      inicial.
+- [x] Repositorio remoto ([Didiu92/ddapp](https://github.com/Didiu92/ddapp)
+      en GitHub) y push inicial.
 
 ### HU 0.2 — Convención de migraciones y estructura Supabase
 - [ ] Documentar (ya hecho en `copilot-instructions.md` y
