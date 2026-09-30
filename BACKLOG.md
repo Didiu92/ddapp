@@ -23,15 +23,15 @@ instrucciones específicas en `.github/instructions/`.
       en GitHub) y push inicial.
 
 ### HU 0.2 — Convención de migraciones y estructura Supabase
-- [ ] Documentar (ya hecho en `copilot-instructions.md` y
+- [x] Documentar (ya hecho en `copilot-instructions.md` y
       `new-migration.prompt.md`) la convención
       `YYYYMMDDHHMMSS_v001__nombre.sql`.
-- [ ] Migración inicial: habilitar extensiones `pgcrypto` (o `pgcrypto`/`uuid-ossp`
-      según lo que use Supabase por defecto para `gen_random_uuid()`) y
-      `unaccent`.
-- [ ] Crear `supabase/seed.sql` vacío (con comentario de cabecera explicando
+- [x] Migración inicial: habilitar extensiones `pgcrypto` y `unaccent`
+      (`20260930103416_v001__enable_extensions.sql`, verificado con
+      `pg_extension` tras `db reset`).
+- [x] Crear `supabase/seed.sql` vacío (con comentario de cabecera explicando
       su propósito) para no arrancar sin el fichero que espera `db reset`.
-- [ ] Confirmar que `supabase start` sigue arrancando limpio tras estos
+- [x] Confirmar que `supabase start` sigue arrancando limpio tras estos
       cambios.
 
 ### HU 0.3 — Scaffold Angular standalone PWA
