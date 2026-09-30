@@ -128,63 +128,67 @@ instrucciones específicas en `.github/instructions/`.
       evento, mision, regla, verbo_magico, ritual_acceso...).
 
 ### HU 2.2 — Fragmentos, desbloqueo y doble versión ⚠️ tabla más sensible del proyecto
-- [ ] Migración: `entry_fragments` (`id`, `entry_id FK`, `sort_order int`,
+- [x] Migración: `entry_fragments` (`id`, `entry_id FK`, `sort_order int`,
       `unlock_level text CHECK ('descubierto','explorado')`,
       `status text CHECK ('draft','published')`, `field_key text` (p. ej.
       `'nombre'`, `'descripcion'`...), `content_known text`,
       `content_real text NULL`).
-- [ ] Migración: `entry_fragment_race_overrides` (`fragment_id FK`,
+- [x] Migración: `entry_fragment_race_overrides` (`fragment_id FK`,
       `race_id FK`, `content_known_override text`, `UNIQUE(fragment_id,
       race_id)`).
-- [ ] Migración: `player_unlocks` (`id`, `player_id FK NULL`, `entry_id FK`,
+- [x] Migración: `player_unlocks` (`id`, `player_id FK NULL`, `entry_id FK`,
       `unlock_level text CHECK`, `unlocked_by FK`, `unlocked_at`).
       `player_id IS NULL` = desbloqueo global.
-- [ ] Migración: `player_reveals` (`id`, `player_id FK NULL`,
+- [x] Migración: `player_reveals` (`id`, `player_id FK NULL`,
       `entry_fragment_id FK`, `revealed_by FK`, `revealed_at`).
-- [ ] RLS `entry_fragments`: `SELECT` visible si `status='published'` Y existe
+- [x] RLS `entry_fragments`: `SELECT` visible si `status='published'` Y existe
       `player_unlocks` con nivel alcanzado para `(player_id = auth.uid() OR
       player_id IS NULL)` sobre `entry_fragments.entry_id`. La máster ve todo
       siempre (incluyendo `draft` y `content_real` sin revelar).
-- [ ] Vista o función auxiliar para resolver `content_known` efectivo
+- [x] Vista o función auxiliar para resolver `content_known` efectivo
       (aplicando override racial si existe uno para la raza del personaje
       activo del jugador) sin filtrar `content_real` salvo revelación.
-- [ ] RLS `player_unlocks`/`player_reveals`: jugador ve solo las suyas (+ las
+      Implementado como vista `entry_fragments_resolved` + `REVOKE` de
+      columna `content_real` en la tabla base.
+- [x] RLS `player_unlocks`/`player_reveals`: jugador ve solo las suyas (+ las
       globales); solo la máster inserta.
-- [ ] **Checkpoint obligatorio**: pasar esta HU completa por
+- [x] **Checkpoint obligatorio**: pasar esta HU completa por
       `.github/prompts/review-rls.prompt.md`, con prueba manual explícita de
       "jugador sin ningún unlock" y "jugador con unlock pero sin reveal".
+      Probado con 3 casos reales (sin unlock → 0 filas; con unlock sin
+      reveal → conocida sí/real no; con reveal → ambas).
 - [ ] UI de máster: editor de entries + fragments (crear/editar, marcar
       draft/published a ambos niveles) y panel de gestión de
       unlocks/reveals (por jugador o global).
 
 ### HU 2.3 — Razas: ficha de creación + conocimiento del mundo
-- [ ] Migración: `races` (`id`, `code text unique`, `name text`,
+- [x] Migración: `races` (`id`, `code text unique`, `name text`,
       `summary text`, `ancestral_question text`, `entry_id FK NULL` → entry de
       tipo `raza` para el "conocimiento del mundo").
-- [ ] Migración: `race_attribute_modifiers` (`race_id FK`,
+- [x] Migración: `race_attribute_modifiers` (`race_id FK`,
       `attribute_code text CHECK` sobre los 6 atributos fijos,
       `modifier int`).
-- [ ] RLS `races`: lectura pública para cualquier autenticado (la ficha de
+- [x] RLS `races`: lectura pública para cualquier autenticado (la ficha de
       creación es visible desde el principio, sin desbloqueo); solo máster
       escribe.
 - [ ] Seed de las 4 razas con su ficha de creación (resumen, pregunta
       ancestral, modificadores) — contenido real lo aporta el usuario, no
-      inventar lore.
-- [ ] Trigger o función: al insertar un `player_unlocks` derivado de "crear
+      inventar lore. **Pendiente: necesito el lore real de las 4 razas.**
+- [x] Trigger o función: al insertar un `player_unlocks` derivado de "crear
       personaje", usar nivel `explorado` sobre `races.entry_id` (ver HU 2.4).
 
 ### HU 2.4 — Creación de personaje (mínima)
-- [ ] Migración: `characters` (`id`, `player_id FK`, `race_id FK`,
+- [x] Migración: `characters` (`id`, `player_id FK`, `race_id FK`,
       `name text`, `profession text`, `age int`,
       `status text CHECK ('activo','retirado','muerto')`, timestamps).
-- [ ] Constraint: índice único parcial
+- [x] Constraint: índice único parcial
       `UNIQUE(player_id) WHERE status = 'activo'` (máximo 1 personaje activo
       por jugador).
-- [ ] RLS `characters`: jugador ve/edita los suyos; máster ve/edita todos;
+- [x] RLS `characters`: jugador ve/edita los suyos; máster ve/edita todos;
       resto de jugadores solo ven datos no sensibles de personajes ajenos (a
       definir alcance exacto en la propia HU de UI, pero nunca el secreto —
       eso es Fase 3).
-- [ ] Función o trigger: al crear un personaje, insertar automáticamente en
+- [x] Función o trigger: al crear un personaje, insertar automáticamente en
       `player_unlocks` su raza en nivel `explorado`.
 - [ ] UI: formulario de creación de personaje (nombre, raza, profesión, edad),
       manejo amigable del error si ya tiene un personaje `activo` (proponer
