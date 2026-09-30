@@ -1,0 +1,5 @@
+-- Datos de arranque del entorno local (supabase db reset).
+-- Vacío por ahora: cada fase del BACKLOG.md irá añadiendo aquí los seeds
+-- necesarios (entry_types, razas, verbos/rituales...) a medida que sus
+-- migraciones se completen. No metas aquí lore definitivo sin confirmar
+-- con el usuario.
