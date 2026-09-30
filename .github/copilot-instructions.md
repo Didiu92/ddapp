@@ -22,6 +22,18 @@ migraciones ≈ Flyway pero con nombre de fichero distinto, Postgres functions
 - `analytics` y `edge_runtime` están desactivados en `supabase/config.toml` por
   incompatibilidades conocidas de esa versión del CLI con Podman. No los actives
   sin comprobar antes si siguen fallando.
+- Cualquier llamada HTTP/psql/curl/python contra `127.0.0.1`/`localhost` desde
+  esta máquina (proxy corporativo) puede recibir una redirección 303 a un
+  portal de la empresa si no defines `NO_PROXY=127.0.0.1,localhost` (y
+  `no_proxy` en minúscula) para esa llamada. Ya pasó con los healthchecks de
+  Podman (resuelto con `http_proxy = false` en `containers.conf`) y con
+  llamadas directas a la Auth Admin API. Si ves un 303 o una redirección a un
+  dominio con "proxy"/"portal" en el nombre, sospecha esto primero.
+- Las 5 cuentas de usuario locales (`master@ddapp.local`,
+  `jugador1..4@ddapp.local`, contraseña `ddapp-local-dev`) NO sobreviven a un
+  `supabase db reset` (recrea `auth.users` desde cero). Vuelve a ejecutar
+  `NO_PROXY=127.0.0.1,localhost python3 scripts/seed-local-users.py` después
+  de cada reset si necesitas iniciar sesión.
 
 ## Estado del repositorio (leer antes de asumir rutas)
 - **El único proyecto real es `~/ddapp` dentro de WSL (Ubuntu)**, con git

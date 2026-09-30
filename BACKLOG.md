@@ -108,22 +108,22 @@ instrucciones específicas en `.github/instructions/`.
 ## FASE 2 — Núcleo del códice + Razas + Creación de personaje
 
 ### HU 2.1 — Motor genérico de tipos de entrada
-- [ ] Migración: `entry_types` (`id`, `code text unique`, `label text`).
-- [ ] Migración: `entry_field_templates` (`id`, `entry_type_id FK`,
+- [x] Migración: `entry_types` (`id`, `code text unique`, `label text`).
+- [x] Migración: `entry_field_templates` (`id`, `entry_type_id FK`,
       `field_key text`, `label text`, `field_type text CHECK` en conjunto
       cerrado (`text`,`richtext`,`number`,`boolean`,`date`,`reference`,
       `enum_list`), `config jsonb`, `sort_order int`).
-- [ ] Migración: `entries` (`id`, `entry_type_id FK`, `code text` — slug
+- [x] Migración: `entries` (`id`, `entry_type_id FK`, `code text` — slug
       interno para la máster, `status text CHECK ('draft','published')`,
       `show_as_unknown_placeholder boolean default false`, timestamps).
       **Sin columna de nombre/descripción** (ver regla de oro en
       `supabase-schema-rls.instructions.md`).
-- [ ] Migración: `entry_field_values` (`entry_id FK`, `field_template_id FK`,
+- [x] Migración: `entry_field_values` (`entry_id FK`, `field_template_id FK`,
       `value jsonb`).
-- [ ] RLS `entries`: la máster ve todo; el jugador ve filas con
+- [x] RLS `entries`: la máster ve todo; el jugador ve filas con
       `status='published'` (el resto de la lógica de "???" se resuelve
       combinando esto con `entry_fragments`, no aquí).
-- [ ] Seed de `entry_types` inicial con los tipos del dominio (raza, lugar,
+- [x] Seed de `entry_types` inicial con los tipos del dominio (raza, lugar,
       npc, facción, objeto, criatura, fauna_flora, idioma, tecnologia, rumor,
       evento, mision, regla, verbo_magico, ritual_acceso...).
 
