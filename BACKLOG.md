@@ -51,7 +51,7 @@ instrucciones específicas en `.github/instructions/`.
       (no `ENUM` nativo) — documentado en `copilot-instructions.md`.
 - [x] Angular standalone/signals/`inject()`/control flow nativo — documentado
       en `angular-frontend.instructions.md`.
-- [ ] README raíz mínimo: cómo levantar el entorno completo (Supabase local +
+- [x] README raíz mínimo: cómo levantar el entorno completo (Supabase local +
       `ng serve`) para no depender solo de la memoria del usuario.
 
 ---
