@@ -1,0 +1,14 @@
+<form (submit)="onSubmit($event)">
+  <label>
+    Email
+    <input type="email" [value]="email()" (input)="onEmailInput($event)" required />
+  </label>
+  <label>
+    Contraseña
+    <input type="password" [value]="password()" (input)="onPasswordInput($event)" required />
+  </label>
+  <button type="submit">Entrar</button>
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+</form>

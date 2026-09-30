@@ -62,39 +62,41 @@ instrucciones específicas en `.github/instructions/`.
 - [ ] Migración: tabla `profiles` (`id uuid PK references auth.users`,
       `display_name text`, `role text CHECK (role IN ('master','player'))`,
       `created_at timestamptz default now()`).
-- [ ] RLS `profiles`: cualquier usuario autenticado puede leer todos los
+- [x] RLS `profiles`: cualquier usuario autenticado puede leer todos los
       `profiles` (necesario para mostrar nombres de otros jugadores en diario,
       diario de sesión, etc.); solo el propio usuario o la máster puede
-      actualizar su fila.
-- [ ] Desactivar signup público en la configuración de Auth (local y, más
+      actualizar su fila (trigger bloquea auto-escalado de `role`).
+- [x] Desactivar signup público en la configuración de Auth (local y, más
       adelante, producción).
 - [ ] Crear manualmente las 5 cuentas (1 máster + 4 jugadores) vía Supabase
       Studio local, y su fila correspondiente en `profiles` con el `role`
-      correcto.
+      correcto. **Pendiente de decisión del usuario**: emails/nombres a usar.
 
 ### HU 1.2 — Guard de roles en Angular
-- [ ] `AuthService` en `core/` con `signal` de sesión actual y `signal`
+- [x] `AuthService` en `core/` con `signal` de sesión actual y `signal`
       computado de rol (`master`/`player`/`null`).
-- [ ] Guards funcionales `canActivateFn`: `masterGuard`, `authenticatedGuard`.
-- [ ] Pantalla de login (email+password, Supabase Auth) y logout.
+- [x] Guards funcionales `canActivateFn`: `masterGuard`, `authenticatedGuard`.
+- [x] Pantalla de login (email+password, Supabase Auth) y logout.
 - [ ] Redirección post-login según rol (jugador → su panel, máster → panel de
-      administración).
+      administración) — pendiente hasta que existan paneles reales distintos
+      en fases posteriores; por ahora hay una única página placeholder tras
+      login que muestra nombre y rol.
 
 ### HU 1.3 — RLS base y auditoría transversal
-- [ ] Función `is_master() RETURNS boolean` (`SECURITY DEFINER` o `STABLE`
+- [x] Función `is_master() RETURNS boolean` (`SECURITY DEFINER` o `STABLE`
       consultando `profiles`), reutilizable en el resto de políticas del
       proyecto.
-- [ ] Migración: tabla `audit_log` (`id`, `actor_id`, `action text`,
+- [x] Migración: tabla `audit_log` (`id`, `actor_id`, `action text`,
       `entity text`, `entity_id uuid`, `payload jsonb`,
       `created_at timestamptz default now()`). RLS: solo la máster puede
       leerla; inserciones vía funciones/triggers, no directamente desde el
       cliente.
-- [ ] Pasar `profiles` y `audit_log` por `review-rls.prompt.md`.
+- [x] Pasar `profiles` y `audit_log` por `review-rls.prompt.md`.
 
 ### HU 1.4 — Sesiones de juego
-- [ ] Migración: tabla `sessions` (`id`, `number int unique`,
+- [x] Migración: tabla `sessions` (`id`, `number int unique`,
       `session_date date`, `title text`, `created_by`, `created_at`).
-- [ ] RLS: `SELECT` para cualquier autenticado; `INSERT`/`UPDATE`/`DELETE`
+- [x] RLS: `SELECT` para cualquier autenticado; `INSERT`/`UPDATE`/`DELETE`
       solo máster.
 - [ ] UI mínima de máster: listar/crear sesiones (número autoincremental
       sugerido, editable).

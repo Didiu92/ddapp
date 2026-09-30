@@ -1,0 +1,6 @@
+@if (auth.profile(); as profile) {
+  <p>Bienvenida/o, {{ profile.display_name }} ({{ profile.role }}).</p>
+} @else {
+  <p>Cargando perfil…</p>
+}
+<button type="button" (click)="signOut()">Cerrar sesión</button>
