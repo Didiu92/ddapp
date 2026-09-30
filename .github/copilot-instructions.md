@@ -23,6 +23,22 @@ migraciones ≈ Flyway pero con nombre de fichero distinto, Postgres functions
   incompatibilidades conocidas de esa versión del CLI con Podman. No los actives
   sin comprobar antes si siguen fallando.
 
+## Estado del repositorio (leer antes de asumir rutas)
+- **El único proyecto real es `~/ddapp` dentro de WSL (Ubuntu)**, con git
+  inicializado ahí y remoto en https://github.com/Didiu92/ddapp (rama `main`).
+  Todo comando de Supabase CLI, `git`, y cualquier operación de terminal debe
+  ejecutarse con `cd ~/ddapp` dentro de WSL.
+- Si ves (o el usuario abre VS Code sobre) una carpeta Windows tipo
+  `c:\Users\...\ddapp` con contenido parecido pero SIN `.git` activo: es una
+  copia de trabajo antigua de cuando el workspace se abrió por error fuera de
+  WSL. No es la fuente de verdad. Si existe y genera confusión, puedes
+  proponer borrarla (confirma primero) una vez comprobado que `~/ddapp` en WSL
+  tiene todo el contenido esperado (compara con `BACKLOG.md`/`.github/` de
+  este repo).
+- Progreso de fases: el estado real y actualizado está en los checkboxes de
+  `BACKLOG.md` en la raíz del repo. Antes de proponer qué hacer a continuación,
+  léelo para ver qué HUs ya están marcadas `[x]`.
+
 ## Resumen de dominio (no reinventar reglas, solo implementar)
 - **Roles**: `master` (control total) y `player` (4 jugadores fijos, alta manual,
   sin signup público). Un jugador puede tener varios personajes pero como máximo
