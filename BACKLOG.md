@@ -35,16 +35,16 @@ instrucciones específicas en `.github/instructions/`.
       cambios.
 
 ### HU 0.3 — Scaffold Angular standalone PWA
-- [ ] `ng new frontend --standalone --routing --style=scss` (dentro de
-      `frontend/`, ajustando si el CLI crea una subcarpeta extra).
-- [ ] Añadir soporte PWA (`ng add @angular/pwa`): manifest + service worker.
-- [ ] Instalar `@supabase/supabase-js`.
-- [ ] Crear `environment.ts` / `environment.development.ts` con URL y anon key
+- [x] `ng new frontend --routing --style=scss` (Angular 22 genera standalone
+      por defecto; sin flag `--standalone` explícito, ya no existe).
+- [x] Añadir soporte PWA (`ng add @angular/pwa`): manifest + service worker.
+- [x] Instalar `@supabase/supabase-js`.
+- [x] Crear `environment.ts` / `environment.development.ts` con URL y anon key
       de Supabase local (sin `service_role key` en el frontend, nunca).
-- [ ] Estructura de carpetas: `core/` (servicios transversales, cliente
+- [x] Estructura de carpetas: `core/` (servicios transversales, cliente
       Supabase, `AuthService`), `features/` (una carpeta por dominio),
       `shared/` (componentes reutilizables).
-- [ ] Confirmar `ng serve` arrancando contra el Supabase local.
+- [x] Confirmar `ng serve` arrancando contra el Supabase local.
 
 ### HU 0.4 — Convenciones documentadas
 - [x] Nombres de tablas `snake_case` plural; estados como `text` + `CHECK`
