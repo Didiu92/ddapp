@@ -1,0 +1,22 @@
+<h2>Códice</h2>
+
+<label>
+  Filtrar por tipo
+  <select (change)="onFilterChange($event)">
+    <option value="">Todos</option>
+    @for (type of entryTypes(); track type.id) {
+      <option [value]="type.id">{{ type.label }}</option>
+    }
+  </select>
+</label>
+
+<ul>
+  @for (row of filteredRows(); track row.id) {
+    <li>
+      <a [routerLink]="['/codice', row.id]">{{ row.code }}</a>
+      ({{ row.typeLabel }})
+    </li>
+  } @empty {
+    <li>No hay entradas visibles todavía.</li>
+  }
+</ul>

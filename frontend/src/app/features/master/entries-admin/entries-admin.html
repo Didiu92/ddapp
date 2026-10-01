@@ -1,0 +1,112 @@
+<h2>Entries y fragmentos</h2>
+
+<form (submit)="createEntry($event)">
+  <label>
+    Tipo
+    <select (change)="newEntryTypeId.set($any($event.target).value)" required>
+      <option value="">— Selecciona —</option>
+      @for (type of entryTypes(); track type.id) {
+        <option [value]="type.id">{{ type.label }}</option>
+      }
+    </select>
+  </label>
+  <label>
+    Código interno
+    <input type="text" [value]="newEntryCode()" (input)="newEntryCode.set($any($event.target).value)" required />
+  </label>
+  <label>
+    <input type="checkbox" (change)="newEntryPlaceholder.set($any($event.target).checked)" />
+    Mostrar "???" si no hay desbloqueo
+  </label>
+  <button type="submit">Crear entry</button>
+</form>
+
+<ul>
+  @for (entry of entries(); track entry.id) {
+    <li>
+      <button type="button" (click)="selectEntry(entry)">{{ entry.code }} ({{ typeLabel(entry.entry_type_id) }})</button>
+      — {{ entry.status }}
+      <button type="button" (click)="toggleEntryStatus(entry)">Cambiar a {{ entry.status === 'draft' ? 'published' : 'draft' }}</button>
+    </li>
+  }
+</ul>
+
+@if (selectedEntry(); as entry) {
+  <h3>Fragmentos de {{ entry.code }}</h3>
+  <ul>
+    @for (fragment of fragments(); track fragment.id) {
+      <li>
+        <strong>{{ fragment.field_key }}</strong> ({{ fragment.unlock_level }}, {{ fragment.status }})
+        <button type="button" (click)="toggleFragmentStatus(fragment)">
+          Cambiar a {{ fragment.status === 'draft' ? 'published' : 'draft' }}
+        </button>
+        <p>Conocido: {{ fragment.content_known }}</p>
+        @if (fragment.content_real) {
+          <p>Real: {{ fragment.content_real }}</p>
+        }
+        <p>Revelaciones: {{ revealsByFragment()[fragment.id]?.length ?? 0 }}</p>
+        <select #revealSelect>
+          <option value="">Global (todos)</option>
+          @for (profile of profiles(); track profile.id) {
+            <option [value]="profile.id">{{ profile.display_name }}</option>
+          }
+        </select>
+        <button type="button" (click)="assignReveal(fragment.id, revealSelect.value)">Revelar</button>
+      </li>
+    } @empty {
+      <li>Sin fragmentos todavía.</li>
+    }
+  </ul>
+
+  <form (submit)="createFragment($event)">
+    <label>
+      Clave de campo
+      <input type="text" [value]="newFragmentFieldKey()" (input)="newFragmentFieldKey.set($any($event.target).value)" required />
+    </label>
+    <label>
+      Nivel de desbloqueo
+      <select (change)="newFragmentLevel.set($any($event.target).value)">
+        <option value="descubierto">descubierto</option>
+        <option value="explorado">explorado</option>
+      </select>
+    </label>
+    <label>
+      Contenido conocido
+      <textarea (input)="newFragmentKnown.set($any($event.target).value)" required></textarea>
+    </label>
+    <label>
+      Contenido real (opcional)
+      <textarea (input)="newFragmentReal.set($any($event.target).value)"></textarea>
+    </label>
+    <button type="submit">Añadir fragmento</button>
+  </form>
+
+  <h3>Desbloqueos de {{ entry.code }}</h3>
+  <ul>
+    @for (unlock of unlocks(); track unlock.id) {
+      <li>{{ profileName(unlock.player_id) }} — {{ unlock.unlock_level }}</li>
+    } @empty {
+      <li>Nadie tiene esta entrada desbloqueada todavía.</li>
+    }
+  </ul>
+
+  <form (submit)="assignUnlock($event)">
+    <label>
+      Jugador
+      <select (change)="unlockPlayerId.set($any($event.target).value)">
+        <option value="">Global (todos)</option>
+        @for (profile of profiles(); track profile.id) {
+          <option [value]="profile.id">{{ profile.display_name }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Nivel
+      <select (change)="unlockLevel.set($any($event.target).value)">
+        <option value="descubierto">descubierto</option>
+        <option value="explorado">explorado</option>
+      </select>
+    </label>
+    <button type="submit">Desbloquear</button>
+  </form>
+}
