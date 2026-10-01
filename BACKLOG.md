@@ -68,11 +68,12 @@ instrucciones específicas en `.github/instructions/`.
       actualizar su fila (trigger bloquea auto-escalado de `role`).
 - [x] Desactivar signup público en la configuración de Auth (local y, más
       adelante, producción).
-- [x] Crear manualmente las 5 cuentas (1 máster + 4 jugadores) vía Supabase
+- [ ] Crear manualmente las 5 cuentas (1 máster + 4 jugadores) vía Supabase
       Studio local, y su fila correspondiente en `profiles` con el `role`
       correcto. Creadas vía Auth Admin API local: `master@ddapp.local`,
       `jugador1..4@ddapp.local`, contraseña `ddapp-local-dev` (solo entorno
-      local; en producción se recrean con credenciales reales).
+      local; en producción se recrean con credenciales reales). Pendiente de
+      ejecutar/verificar en este entorno.
 
 ### HU 1.2 — Guard de roles en Angular
 - [x] `AuthService` en `core/` con `signal` de sesión actual y `signal`

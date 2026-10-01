@@ -2,6 +2,7 @@ import json
 import re
 import subprocess
 import urllib.request
+from pathlib import Path
 
 BASE_URL = "http://127.0.0.1:54321"
 PASSWORD = "ddapp-local-dev"
@@ -12,7 +13,7 @@ def get_service_role_key() -> str:
     # CLI para que no acabe commiteada (GitHub la bloquea con razon).
     result = subprocess.run(
         ["npx", "supabase", "status", "-o", "env"],
-        cwd="/home/divinuales/ddapp",
+        cwd=Path(__file__).resolve().parents[1],
         capture_output=True,
         text=True,
         check=True,
@@ -25,15 +26,21 @@ def get_service_role_key() -> str:
 
 SERVICE_KEY = get_service_role_key()
 
-USERS = [
-    ("master@ddapp.local", "Master", "master"),
-    ("jugador1@ddapp.local", "Jugador 1", "player"),
-    ("jugador2@ddapp.local", "Jugador 2", "player"),
-    ("jugador3@ddapp.local", "Jugador 3", "player"),
-    ("jugador4@ddapp.local", "Jugador 4", "player"),
-]
 
-for email, display_name, role in USERS:
+def get_existing_users() -> dict[str, str]:
+    req = urllib.request.Request(
+        f"{BASE_URL}/auth/v1/admin/users?page=1&per_page=1000",
+        headers={
+            "apikey": SERVICE_KEY,
+            "Authorization": f"Bearer {SERVICE_KEY}",
+        },
+    )
+    with urllib.request.urlopen(req) as resp:
+        data = json.load(resp)
+    return {user["email"]: user["id"] for user in data.get("users", [])}
+
+
+def create_user(email: str) -> str:
     body = json.dumps({
         "email": email,
         "password": PASSWORD,
@@ -50,13 +57,31 @@ for email, display_name, role in USERS:
         },
     )
     with urllib.request.urlopen(req) as resp:
-        data = json.load(resp)
-    user_id = data["id"]
-    print(f"{email} -> {user_id}")
+        return json.load(resp)["id"]
+
+USERS = [
+    ("master@ddapp.local", "Master", "master"),
+    ("jugador1@ddapp.local", "Jugador 1", "player"),
+    ("jugador2@ddapp.local", "Jugador 2", "player"),
+    ("jugador3@ddapp.local", "Jugador 3", "player"),
+    ("jugador4@ddapp.local", "Jugador 4", "player"),
+]
+
+existing_users = get_existing_users()
+
+for email, display_name, role in USERS:
+    user_id = existing_users.get(email)
+    if user_id is None:
+        user_id = create_user(email)
+        print(f"creado {email} -> {user_id}")
+    else:
+        print(f"existente {email} -> {user_id}")
 
     sql = (
         "insert into public.profiles (id, display_name, role) values "
-        f"('{user_id}', '{display_name}', '{role}');"
+        f"('{user_id}', '{display_name}', '{role}') "
+        "on conflict (id) do update set display_name = excluded.display_name, "
+        "role = excluded.role;"
     )
     subprocess.run(
         [

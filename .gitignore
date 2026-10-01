@@ -11,3 +11,4 @@ supabase/.temp/
 # OS / editor
 .DS_Store
 Thumbs.db
+scripts/__pycache__/

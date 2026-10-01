@@ -59,7 +59,9 @@ migraciones ≈ Flyway pero con nombre de fichero distinto, Postgres functions
   NPC, facción, objeto, criatura, idioma, evento, misión, regla, magia...). Tipos
   y plantillas de campo configurables por datos (`entry_types`,
   `entry_field_templates`), nunca hay que tocar código para añadir un tipo o
-  campo nuevo.
+  campo nuevo. `entry_field_values` queda reservado para metadatos no narrativos
+  que no revelen lore; nunca se usará para nombre, descripción ni contenido
+  sujeto a desbloqueo.
 - **`entries` nunca contiene texto identificativo o de lore.** Solo metadatos
   estructurales (`entry_type_id`, `code` interno para la máster, `status`,
   `show_as_unknown_placeholder`). El nombre, descripción y cualquier contenido

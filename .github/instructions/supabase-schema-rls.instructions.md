@@ -42,8 +42,9 @@ que envuelva una `entry`.
   `reference`, `enum_list`...).
 - `entries(entry_type_id, code, status, show_as_unknown_placeholder)`.
 - `entry_field_values(entry_id, field_template_id, value jsonb)` — valores
-  concretos. Aquí sí es correcto usar `jsonb`: es contenido de lore flexible,
-  no datos estructurales de personaje.
+   concretos de metadatos no narrativos. No usar esta tabla para lore ni para
+   datos que puedan desbloquearse: ese contenido debe vivir en
+   `entry_fragments`, que es la única capa con desbloqueo y doble versión.
 - `entry_fragments(entry_id, sort_order, unlock_level, status, content_known,
   content_real)` — unidad real de desbloqueo y de doble versión.
 - `entry_fragment_race_overrides(fragment_id, race_id, content_known_override)`
