@@ -1,0 +1,52 @@
+<h2>Tipos de entrada</h2>
+
+<form (submit)="createType($event)">
+  <label>
+    Código
+    <input type="text" [value]="newTypeCode()" (input)="newTypeCode.set($any($event.target).value)" required />
+  </label>
+  <label>
+    Etiqueta
+    <input type="text" [value]="newTypeLabel()" (input)="newTypeLabel.set($any($event.target).value)" required />
+  </label>
+  <button type="submit">Crear tipo</button>
+</form>
+
+<ul>
+  @for (type of entryTypes(); track type.id) {
+    <li>
+      <button type="button" (click)="selectType(type.id)">{{ type.label }} ({{ type.code }})</button>
+    </li>
+  }
+</ul>
+
+@if (selectedTypeId()) {
+  <h3>Campos de la plantilla</h3>
+  <ul>
+    @for (template of templates(); track template.id) {
+      <li>{{ template.label }} — {{ template.field_key }} ({{ template.field_type }})</li>
+    } @empty {
+      <li>Sin campos todavía.</li>
+    }
+  </ul>
+
+  <form (submit)="createField($event)">
+    <label>
+      Clave de campo
+      <input type="text" [value]="newFieldKey()" (input)="newFieldKey.set($any($event.target).value)" required />
+    </label>
+    <label>
+      Etiqueta
+      <input type="text" [value]="newFieldLabel()" (input)="newFieldLabel.set($any($event.target).value)" required />
+    </label>
+    <label>
+      Tipo de campo
+      <select (change)="newFieldType.set($any($event.target).value)">
+        @for (ft of fieldTypes; track ft) {
+          <option [value]="ft">{{ ft }}</option>
+        }
+      </select>
+    </label>
+    <button type="submit">Añadir campo</button>
+  </form>
+}

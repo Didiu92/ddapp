@@ -1,5 +1,13 @@
 @if (auth.profile(); as profile) {
   <p>Bienvenida/o, {{ profile.display_name }} ({{ profile.role }}).</p>
+  <nav>
+    <a routerLink="/codice">Códice</a>
+    <a routerLink="/personajes/crear">Crear personaje</a>
+    @if (auth.isMaster()) {
+      <a routerLink="/master/tipos">Admin: tipos</a>
+      <a routerLink="/master/entries">Admin: entries</a>
+    }
+  </nav>
 } @else {
   <p>Cargando perfil…</p>
 }

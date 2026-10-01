@@ -1,0 +1,29 @@
+<h2>Crear personaje</h2>
+
+<form (submit)="onSubmit($event)">
+  <label>
+    Nombre
+    <input type="text" [value]="name()" (input)="onNameInput($event)" required />
+  </label>
+  <label>
+    Raza
+    <select (change)="onRaceChange($event)" required>
+      <option value="">— Selecciona —</option>
+      @for (race of races(); track race.id) {
+        <option [value]="race.id">{{ race.name }}</option>
+      }
+    </select>
+  </label>
+  <label>
+    Profesión
+    <input type="text" [value]="profession()" (input)="onProfessionInput($event)" />
+  </label>
+  <label>
+    Edad
+    <input type="number" (input)="onAgeInput($event)" />
+  </label>
+  <button type="submit">Crear</button>
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+</form>

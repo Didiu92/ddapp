@@ -1,0 +1,23 @@
+@if (entry(); as e) {
+  @if (showUnknownPlaceholder()) {
+    <h2>??? ({{ entryType()?.label }})</h2>
+    <p>Todavía no has descubierto nada sobre esta entrada.</p>
+  } @else {
+    <h2>{{ e.code }} ({{ entryType()?.label }})</h2>
+    <ul>
+      @for (fragment of fragments(); track fragment.id) {
+        <li>
+          <strong>{{ fragment.field_key }}</strong> ({{ fragment.unlock_level }}):
+          <p>{{ fragment.content_known }}</p>
+          @if (fragment.content_real) {
+            <p><em>Versión real (revelada):</em> {{ fragment.content_real }}</p>
+          }
+        </li>
+      } @empty {
+        <li>Sin fragmentos visibles todavía.</li>
+      }
+    </ul>
+  }
+} @else {
+  <p>Cargando…</p>
+}
